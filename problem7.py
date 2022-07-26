@@ -1,68 +1,37 @@
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import Adam, SGD
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-import pandas
-import matplotlib as plt
-import numpy
+df = pd.read_csv('Salary.csv')
 
-torch.manual_seed(1)
-train_dataset = pandas.read_csv('/Users/ijunhyeong/Desktop/mytorch/icecream_sales.csv')
+x_data = np.array(df[['temp']], dtype=np.float32)
+y_data = np.array(df['Sales'], dtype=np.float32)
 
-x = train_dataset.loc[:, 'temp']
-y = train_dataset.loc[:, 'sales']
+x_data = x_data.reshape((-1, 1))
+y_data = y_data.reshape((-1, 1))
 
-xp = torch.from_numpy(x).float().cuda()
-yp = torch.from_numpy(y).float().cuda()
+print(x_data.shape)
+print(y_data.shape)
 
-class linearRegression(torch.nn.Module):
-    def __init__(self, inputSize, outputSize):
-        super(linearRegression, self).__init__()
-        self.linear = torch.nn.Linear(inputSize, outputSize)
+x_train, x_val, y_train, y_val = train_test_split(x_data, y_data, test_size=0.2, random_state=2021)
 
-    def forward(self, x):
-        out = self.linear(x)
-        return out
+print(x_train.shape, x_val.shape)
+print(y_train.shape, y_val.shape)
 
-inputDim = 1        # takes variable 'x'
-outputDim = 1       # takes variable 'y'
-learningRate = 0.02
-epochs = 25
+model = Sequential([
+  Dense(1)
+])
 
-model = linearRegression(inputDim, outputDim).cuda()
+model.compile(loss='mean_absolute_error', optimizer=Adam(lr=0.1))
 
-
-criterion = torch.nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learningRate)
-
-losses = []
-final_loss = 0
-for epoch in range(epochs):
-    # get output from the model, given the inputs
-    y_pred = model(xp)
-
-    # get loss for the predicted output
-    loss = criterion(y_pred, yp)
-
-    losses.append(loss.item())
-
-    # Clear gradient buffers because we don't want any gradient from previous epoch to carry forward, dont want to cummulate gradients
-    optimizer.zero_grad()
-
-    # get gradients w.r.t to parameters
-    loss.backward()
-
-    final_loss = loss.item()
-
-    # update parameters
-    optimizer.step()
-
-    print('epoch: ', epoch, ' , loss: ', loss.item())
-
-y_pred = model(xp)
-
-plt.scatter(xp.cpu(),yp.cpu())
-plt.plot(xp.cpu(),y_pred.detach().cpu(),'r')
-plt.xlabel('experience')
-plt.ylabel('salary')
+model.fit(
+    x_train,
+    y_train,
+    validation_data=(x_val, y_val), # 검증 데이터를 넣어주면 한 epoch이 끝날때마다 자동으로 검증
+    epochs=100 # epochs 복수형으로 쓰기!
+)
