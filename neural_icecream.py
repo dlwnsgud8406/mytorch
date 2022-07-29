@@ -1,47 +1,53 @@
-import torch
-import torch.nn as nn
-import pandas as pd
-import numpy as np
+
+
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import tensorflow as tf
+from tensorflow.keras import layers
 import matplotlib.pyplot as plt
-from torch.autograd import Variable
-from sklearn.preprocessing import MinMaxScaler
 
-df = pd.read_csv('icecream_sales.csv')
-val_df = pd.read_csv('val1.csv')
-
-df = df.iloc[:, 1:2].values
-
-sc = MinMaxScaler()
-training_data = sc.fit_transform(df)
-
-def sliding_windows(data, seq_length):
-    x=[]
-    y=[]
-
-    for i in range(len(data)-seq_length -1):
-        _x = data[i:(i+seq_length)]
-        _y = data[i+seq_length]
-        x.append(_x)
-        y.append(_y)
-    return np.array(x), np.array(y)
-seq_length = 4
-x, y = sliding_windows(training_data, seq_length)
+data = pd.read_csv("icecream_sales.csv")
 
 
-# x = df.loc[:, 'temp'].values
-# y = df.loc[:, 'sales'].values
+x_train = data.temp
+y_train = data.sales
 
-xp = torch.from_numpy(x).float()
-yp = torch.from_numpy(y).float()
+# model building
+regularizer=tf.keras.regularizers.l2(0.0001)
+inputs = layers.Input(shape = (1,))
+x = layers.Dense(1, activation= "relu", kernel_regularizer = regularizer)(inputs)
 
-# 7일간의 데이터가 입력으로 들어가고 batch size는 임의로 지정
-seq_length = 7
-batch = 100
+outputs = (x)
 
-# 데이터를 역순으로 정렬하여 전체 데이터의 70% 학습, 30% 테스트에 사용
-df = df[::-1]
-train_size = int(len(df)*0.7)
-train_set = df[0:train_size]
-test_set = df[train_size-seq_length:]
+model = tf.keras.Model(inputs, outputs)
 
+
+# compiling the model
+
+model.compile(
+    loss = tf.keras.losses.mean_squared_error,
+    optimizer = tf.keras.optimizers.Adam(0.01)
+)
+
+# fitting the data to model
+
+
+for i in range(0, 25):
+    model_hist = model.fit(x_train, y_train, epochs=1000)
+
+    model.get_weights()
+    temp1 = 26
+    predicted_revenue1 = model.predict([temp1])
+
+    temp2 = 24
+    predicted_revenue2 = model.predict([temp2])
+
+    temp3 = 39
+    predicted_revenue3 = model.predict([temp3])
+
+    print(f"Predicted Revenue: {float(predicted_revenue1): 0.2f}, {float(predicted_revenue2): 0.2f}, {float(predicted_revenue3): 0.2f}")
+
+    file = open("neural_network.txt", 'a')
+    str = f"Predicted Revenue: {float(predicted_revenue1): 0.2f}, {float(predicted_revenue2): 0.2f}, {float(predicted_revenue3): 0.2f}\n"
+    file.write(str)
 

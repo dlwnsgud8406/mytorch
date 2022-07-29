@@ -1,0 +1,25 @@
+neural_network training result
+Predicted Revenue:  202.28,  187.25,  299.98
+Predicted Revenue:  202.33,  187.22,  300.53
+Predicted Revenue:  202.10,  186.89,  300.96
+Predicted Revenue:  201.74,  186.36,  301.66
+Predicted Revenue:  201.18,  185.56,  302.72
+Predicted Revenue:  200.40,  184.43,  304.22
+Predicted Revenue:  199.41,  182.99,  306.13
+Predicted Revenue:  198.27,  181.34,  308.30
+Predicted Revenue:  197.05,  179.58,  310.60
+Predicted Revenue:  195.81,  177.80,  312.93
+Predicted Revenue:  194.59,  176.03,  315.22
+Predicted Revenue:  193.40,  174.31,  317.44
+Predicted Revenue:  192.26,  172.67,  319.57
+Predicted Revenue:  191.19,  171.13,  321.55
+Predicted Revenue:  190.23,  169.76,  323.32
+Predicted Revenue:  189.44,  168.61,  324.80
+Predicted Revenue:  188.87,  167.80,  325.86
+Predicted Revenue:  188.58,  167.37,  326.40
+Predicted Revenue:  188.49,  167.25,  326.56
+Predicted Revenue:  188.49,  167.24,  326.58
+Predicted Revenue:  188.48,  167.24,  326.57
+Predicted Revenue:  188.49,  167.24,  326.58
+Predicted Revenue:  188.49,  167.24,  326.58
+Predicted Revenue:  188.48,  167.24,  326.57
