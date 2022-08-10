@@ -1,4 +1,4 @@
-neural_network training result
+d
 Predicted Revenue:  202.28,  187.25,  299.98
 Predicted Revenue:  202.33,  187.22,  300.53
 Predicted Revenue:  202.10,  186.89,  300.96
